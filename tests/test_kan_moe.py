@@ -5,7 +5,7 @@ from abelkan import LogExpMultKAN, MittagLefflerSpectralHead, TemperatureTopKMoE
 
 def test_logexp_multkan_symbolic_and_l1() -> None:
     torch.manual_seed(42)
-    kan = LogExpMultKAN(in_features=3, num_branches=1)
+    kan = LogExpMultKAN(in_features=3, num_branches=1).double()
     with torch.no_grad():
         kan.W_power.data[0, 0] = 0.0
         kan.W_power.data[0, 1] = 0.35
@@ -21,14 +21,14 @@ def test_logexp_multkan_symbolic_and_l1() -> None:
 
 
 def test_spectral_head_and_moe() -> None:
-    moe = TemperatureTopKMoE(d_model=16, num_experts=4, k=2, init_temp=1.5)
+    moe = TemperatureTopKMoE(d_model=16, num_experts=4, k=2, init_temp=1.5).double()
     x = torch.randn(4, 16, dtype=torch.float64)
     out, idx = moe(x)
     assert out.shape == (4, 16)
     assert idx.shape == (4, 2)
     assert torch.isfinite(moe.balance_loss())
 
-    head = MittagLefflerSpectralHead(d_model=16, out_channels=3, num_modes=3)
+    head = MittagLefflerSpectralHead(d_model=16, out_channels=3, num_modes=3).double()
     alpha = torch.full((4,), 0.72, dtype=torch.float64)
     t_eval = torch.linspace(0.0, 100.0, 25, dtype=torch.float64)
     traj = head(out, alpha, t_eval)
