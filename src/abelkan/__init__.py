@@ -11,13 +11,13 @@ from .pade import MittagLefflerPade34, mittag_leffler_pade34
 __version__ = "0.1.0"
 
 __all__ = [
-    "__version__",
-    "MittagLefflerPade34",
-    "mittag_leffler_pade34",
     "AbelCausalAttention",
     "AbelTransformerLayer",
-    "LogExpMultKAN",
     "GaussianBellGate",
+    "LogExpMultKAN",
+    "MittagLefflerPade34",
     "MittagLefflerSpectralHead",
     "TemperatureTopKMoE",
+    "__version__",
+    "mittag_leffler_pade34",
 ]
