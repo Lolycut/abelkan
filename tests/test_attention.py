@@ -5,7 +5,7 @@ from abelkan import AbelCausalAttention, AbelTransformerLayer
 
 def test_strict_causality() -> None:
     torch.manual_seed(0)
-    attn = AbelCausalAttention(d_model=16, decay_mode="abel")
+    attn = AbelCausalAttention(d_model=16, decay_mode="abel").double()
     x = torch.randn(2, 10, 16, dtype=torch.float64)
     ts = torch.linspace(0.0, 90.0, 10, dtype=torch.float64).unsqueeze(0).expand(2, 10)
 
@@ -27,7 +27,7 @@ def test_decay_modes_and_mask() -> None:
     mask = torch.tensor([[1, 1, 1, 0, 1, 1], [1, 0, 1, 1, 1, 0]], dtype=torch.float64)
 
     for mode in ("abel", "exp_alibi", "none"):
-        layer = AbelTransformerLayer(d_model=16, decay_mode=mode)
+        layer = AbelTransformerLayer(d_model=16, decay_mode=mode).double()
         out, a_hat, s_hat = layer(x, ts, attn_mask=mask)
         assert out.shape == (2, 6, 16)
         assert a_hat.shape == (2, 6)
