@@ -1,5 +1,3 @@
-from typing import List, Optional
-
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -47,7 +45,7 @@ class LogExpMultKAN(nn.Module):
         return torch.abs(self.W_power).sum()
 
     def to_symbolic(
-        self, feature_names: Optional[List[str]] = None, precision: int = 3
+        self, feature_names: list[str] | None = None, precision: int = 3
     ) -> str:
         if feature_names is None:
             feature_names = [f"x{i}" for i in range(self.in_features)]

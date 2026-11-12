@@ -1,5 +1,5 @@
 import math
-from typing import Literal, Optional, Tuple
+from typing import Literal
 
 import torch
 import torch.nn as nn
@@ -45,9 +45,9 @@ class AbelCausalAttention(nn.Module):
         self,
         x: torch.Tensor,
         timestamps: torch.Tensor,
-        attn_mask: Optional[torch.Tensor] = None,
-        alpha: Optional[torch.Tensor] = None,
-    ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+        attn_mask: torch.Tensor | None = None,
+        alpha: torch.Tensor | None = None,
+    ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         """
         Args:
             x: (B, N, d_model)
@@ -106,7 +106,8 @@ class AbelCausalAttention(nn.Module):
                 raise ValueError(f"Unknown decay_mode: {self.decay_mode}")
             scores = scores + bias
 
-        scores_masked = torch.where(causal_mask, scores, torch.tensor(-1e9, dtype=dtype, device=device))
+        neg_inf = torch.tensor(-1e9, dtype=dtype, device=device)
+        scores_masked = torch.where(causal_mask, scores, neg_inf)
         attn_w = torch.softmax(scores_masked, dim=-1) * causal_w
         attn_w = attn_w / torch.clamp(attn_w.sum(dim=-1, keepdim=True), min=1e-12)
 
@@ -140,9 +141,9 @@ class AbelTransformerLayer(nn.Module):
         self,
         x: torch.Tensor,
         timestamps: torch.Tensor,
-        attn_mask: Optional[torch.Tensor] = None,
-        alpha: Optional[torch.Tensor] = None,
-    ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+        attn_mask: torch.Tensor | None = None,
+        alpha: torch.Tensor | None = None,
+    ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         att_out, alpha_hat, sigma_alpha = self.attn(x, timestamps, attn_mask=attn_mask, alpha=alpha)
         h = self.norm1(x + att_out)
         h = self.norm2(h + self.ffn(h))

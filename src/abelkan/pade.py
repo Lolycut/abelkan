@@ -1,5 +1,4 @@
 import math
-from typing import Dict, Optional, Tuple
 
 import torch
 import torch.nn as nn
@@ -23,7 +22,7 @@ class MittagLefflerPade34(nn.Module):
     @staticmethod
     def _solve_pade_coeffs(
         alpha: torch.Tensor,
-    ) -> Tuple[
+    ) -> tuple[
         torch.Tensor,
         torch.Tensor,
         torch.Tensor,
@@ -90,7 +89,7 @@ class MittagLefflerPade34(nn.Module):
 
     def caputo_basis_and_derivative(
         self, lam: torch.Tensor, t: torch.Tensor, alpha: torch.Tensor
-    ) -> Tuple[torch.Tensor, torch.Tensor]:
+    ) -> tuple[torch.Tensor, torch.Tensor]:
         """
         Evaluates y(t) = E_{alpha,1}(-lam * t^alpha) and its exact Caputo derivative
         D_t^alpha y(t) = -lam * E_{alpha,1}(-lam * t^alpha).
@@ -107,8 +106,8 @@ class MittagLefflerPade34(nn.Module):
         return e_val, -lam_exp * e_val
 
     def certify_pole_free(
-        self, alpha_grid: Optional[torch.Tensor] = None
-    ) -> Dict[str, object]:
+        self, alpha_grid: torch.Tensor | None = None
+    ) -> dict[str, object]:
         """
         Algebraically certifies pole-freedom of Q_4(z) on [0, +inf) via Descartes' Rule
         of Signs: if q1, q2, q3, q4 > 0 for all alpha in alpha_grid, Q_4(z) has zero

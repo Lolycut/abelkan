@@ -1,5 +1,3 @@
-from typing import List, Optional, Tuple
-
 import torch
 import torch.nn as nn
 
@@ -13,11 +11,11 @@ class TemperatureTopKMoE(nn.Module):
     def __init__(
         self,
         d_model: int,
-        experts: Optional[List[nn.Module]] = None,
+        experts: list[nn.Module] | None = None,
         num_experts: int = 4,
         k: int = 2,
         init_temp: float = 2.0,
-        gate_in_dim: Optional[int] = None,
+        gate_in_dim: int | None = None,
     ) -> None:
         super().__init__()
         if experts is not None:
@@ -40,8 +38,8 @@ class TemperatureTopKMoE(nn.Module):
         return self._last_balance_loss
 
     def forward(
-        self, x: torch.Tensor, gate_features: Optional[torch.Tensor] = None
-    ) -> Tuple[torch.Tensor, torch.Tensor]:
+        self, x: torch.Tensor, gate_features: torch.Tensor | None = None
+    ) -> tuple[torch.Tensor, torch.Tensor]:
         """
         Args:
             x: (B, d_model)
