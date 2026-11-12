@@ -1,0 +1,49 @@
+[build-system]
+requires = ["hatchling>=1.24"]
+build-backend = "hatchling.build"
+
+[project]
+name = "abelkan"
+version = "0.1.0"
+description = "Pole-free Pade Mittag-Leffler spectral layers, Abel power-law attention, and neuro-symbolic KAN primitives for PyTorch."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+  { name = "Ilya Kakhno", email = "Sunnywww1701@gmail.com" }
+]
+keywords = [
+  "pytorch", "kolmogorov-arnold-networks", "fractional-calculus",
+  "mittag-leffler", "pade-approximant", "attention", "sciml", "time-series"
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+  "torch>=2.1.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "ruff>=0.6", "scipy>=1.11"]
+
+[project.urls]
+Homepage = "https://github.com/Lolycut/abelkan"
+Repository = "https://github.com/Lolycut/abelkan"
+Paper = "https://github.com/Lolycut/TerraKAN"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/abelkan"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
