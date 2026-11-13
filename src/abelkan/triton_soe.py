@@ -11,16 +11,13 @@ When CUDA/Triton is unavailable (e.g. CPU environments), `soe_chunkwise_forward`
 automatically dispatches to `abelkan.soe.soe_chunkwise_scan` in float32/float64.
 """
 
+import importlib.util
+
 import numpy as np
+
 from .soe import soe_chunkwise_scan, to_bfloat16_sim
 
-try:
-    import triton
-    import triton.language as tl
-
-    HAS_TRITON = True
-except ImportError:
-    HAS_TRITON = False
+HAS_TRITON = importlib.util.find_spec("triton") is not None
 
 
 def soe_chunkwise_forward(

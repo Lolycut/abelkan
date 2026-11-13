@@ -2,11 +2,9 @@ import numpy as np
 from scipy.optimize import nnls
 
 from abelkan.soe import (
-    blelloch_associative_scan,
     soe_associative_scan,
     soe_chunkwise_scan,
     soe_sequential_scan,
-    to_bfloat16_sim,
 )
 from abelkan.triton_soe import soe_chunkwise_forward
 
