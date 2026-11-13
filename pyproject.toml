@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "abelkan"
-version = "0.1.0"
+version = "0.6.0"
 description = "Pole-free Pade Mittag-Leffler spectral layers, Abel power-law attention, and neuro-symbolic KAN primitives for PyTorch."
 readme = "README.md"
 requires-python = ">=3.10"

@@ -131,6 +131,36 @@ class MittagLefflerPade34(nn.Module):
         }
 
 
+
+    def certify_complex_stability(
+        self, alpha_grid: torch.Tensor | None = None
+    ) -> dict[str, object]:
+        """
+        Certifies Hurwitz stability of Q_4(z) across alpha_grid via Routh-Hurwitz
+        minors (ensuring all complex roots lie strictly in Re(z) < 0, i.e., zero
+        poles on the entire right half-plane {Re(z) >= 0}).
+        """
+        if alpha_grid is None:
+            alpha_grid = torch.linspace(0.40, self.bridge_start, 501, dtype=torch.float64)
+        _, _, _, q1, q2, q3, q4 = self._solve_pade_coeffs(alpha_grid.to(torch.float64))
+        d2 = q3 * q2 - q4 * q1
+        d3 = q1 * d2 - (q3 ** 2)
+        hurwitz = bool(
+            float(q1.min().item()) > 0.0
+            and float(q2.min().item()) > 0.0
+            and float(q3.min().item()) > 0.0
+            and float(q4.min().item()) > 0.0
+            and float(d2.min().item()) > 0.0
+            and float(d3.min().item()) > 0.0
+        )
+        return {
+            "certified_hurwitz_stable": hurwitz,
+            "min_routh_d2": float(d2.min().item()),
+            "min_routh_d3": float(d3.min().item()),
+            "n_alphas": int(alpha_grid.numel()),
+        }
+
+
 def mittag_leffler_pade34(z: torch.Tensor, alpha: torch.Tensor) -> torch.Tensor:
     """Functional wrapper for MittagLefflerPade34."""
     return MittagLefflerPade34()(z, alpha)

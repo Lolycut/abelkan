@@ -47,3 +47,10 @@ def test_float32_compatibility() -> None:
     out = ml(z32, a32)
     assert out.dtype == torch.float32
     assert torch.isfinite(out).all()
+
+
+def test_routh_hurwitz_complex_stability() -> None:
+    ml = MittagLefflerPade34()
+    cert = ml.certify_complex_stability()
+    assert cert["certified_hurwitz_stable"] is True
+    assert cert["min_routh_d2"] > 0.0 and cert["min_routh_d3"] > 0.0
